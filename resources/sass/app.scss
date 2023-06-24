@@ -1,0 +1,16 @@
+// Fonts
+@import url("https://fonts.bunny.net/css?family=Nunito");
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+.zoom-effect {
+    transition: transform 0.4s;
+}
+
+.zoom-effect:hover {
+    transform: scale(1.1);
+}
