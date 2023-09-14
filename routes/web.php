@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\Admin\PhoneController;
+use App\Http\Controllers\Admin\ProductsController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
@@ -23,21 +23,21 @@ Auth::routes();
 */
 
 
-Route::get('/', [PhoneController::class, 'index'])->name('home');
+Route::get('/home', [ProductsController::class, 'index'])->name('home');
 // admin panel
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 Route::delete('/admin/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-Route::delete('/admin/phones/{id}', [PhoneController::class, 'destroy'])->name('admin.phones.delete');
-Route::get('/admin/phones/{id}/edit', [PhoneController::class, 'edit'])->name('admin.phones.edit');
-Route::put('/admin/phones/{id}', [PhoneController::class, 'update'])->name('admin.phones.update');
+Route::delete('/admin/products/{id}', [ProductsController::class, 'destroy'])->name('admin.products.delete');
+Route::get('/admin/products/{id}/edit', [ProductsController::class, 'edit'])->name('admin.products.edit');
+Route::put('/admin/products/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
 Route::delete('/admin/orders/{orderId}', [DashboardController::class, 'deleteOrder'])->name('admin.deleteOrder');
-Route::get('/admin/create', [PhoneController::class, 'create'])->name('admin.phones.create');
+Route::get('/admin/create', [ProductsController::class, 'create'])->name('admin.products.create');
 Route::put('/orders/{orderId}', [DashboardController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
+
+
 // store page and details 
-
-
-Route::get('/store', [PhoneController::class, 'index'])->name('admin.phones.index');
-Route::post('/phones', [PhoneController::class, 'store'])->name('admin.phones.store');
+Route::get('/store', [ProductsController::class, 'index'])->name('admin.products.index');
+Route::post('/products', [ProductsController::class, 'store'])->name('admin.products.store');
 Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
 
 // cart

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            @foreach($phones as $phone)
+            @foreach($products as $product)
             <div class="col-md-4 mb-4">
                 <div class="card">
                     <img src="{{ Storage::url($phone->photo) }}" alt="Phone Photo" class="card-img-top zoom-effect">

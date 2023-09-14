@@ -4,23 +4,23 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Phone;
+use App\Models\product;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
-class PhoneController extends Controller
+class ProductsController extends Controller
 {
     public function create()
     {
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
 
-        return view('admin.phones.create', ['totalQuantity' => $totalQuantity]);
+        return view('admin.products.create', ['totalQuantity' => $totalQuantity]);
     }
 
     public function store(Request $request)
@@ -36,36 +36,36 @@ class PhoneController extends Controller
         $photo = $request->file('photo');
 
         // Збереження нового запису телефону
-        $phone = new Phone();
-        $phone->brand = $brand;
-        $phone->model = $model;
-        $phone->price = $price;
-        $phone->color = $color;
-        $phone->storage = $storage;
-        $phone->screen_size = $screenSize;
-        $phone->ram = $ram;
+        $product = new product();
+        $product->brand = $brand;
+        $product->model = $model;
+        $product->price = $price;
+        $product->color = $color;
+        $product->storage = $storage;
+        $product->screen_size = $screenSize;
+        $product->ram = $ram;
 
         // Завантаження фотографії
         if ($photo) {
             $photoPath = $photo->store('public/photos');
-            $phone->photo = $photoPath;
+            $product->photo = $photoPath;
         }
 
-        $phone->save();
+        $product->save();
 
         // Перенаправлення на потрібну сторінку після збереження
-        return redirect()->route('admin.phones.index');
+        return redirect()->route('admin.products.index');
     }
 
     public function destroy($id)
     {
         // Знаходження телефону за його ідентифікатором
-        $phone = Phone::find($id);
+        $product = product::find($id);
 
         // Перевірка, чи телефон знайдено
-        if ($phone) {
+        if ($product) {
             // Виконуємо видалення телефону
-            $phone->delete();
+            $product->delete();
 
             // Повертаємо користувача на потрібну сторінку з повідомленням про успішне видалення
             return redirect()->route('admin.dashboard')->with('success', 'Телефон успішно видалено.');
@@ -77,13 +77,13 @@ class PhoneController extends Controller
 
     public function edit($id)
     {
-        $phone = Phone::find($id);
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $product = product::find($id);
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
-        return view('admin.phones.edit', compact('phone'), ['totalQuantity' => $totalQuantity]);
+        return view('admin.products.edit', compact('product'), ['totalQuantity' => $totalQuantity]);
     }
 
     public function update(Request $request, $id)
@@ -99,30 +99,30 @@ class PhoneController extends Controller
         $photo = $request->file('photo');
 
         // Знайдіть телефон за його ідентифікатором
-        $phone = Phone::find($id);
+        $product = product::find($id);
 
         // Оновити дані телефону
-        $phone->brand = $brand;
-        $phone->model = $model;
-        $phone->price = $price;
-        $phone->color = $color;
-        $phone->storage = $storage;
-        $phone->screen_size = $screenSize;
-        $phone->ram = $ram;
+        $product->brand = $brand;
+        $product->model = $model;
+        $product->price = $price;
+        $product->color = $color;
+        $product->storage = $storage;
+        $product->screen_size = $screenSize;
+        $product->ram = $ram;
 
         // Зміна фотографії
         if ($photo) {
             // Видалення попередньої фотографії, якщо вона існує
-            if ($phone->photo) {
-                Storage::delete($phone->photo);
+            if ($product->photo) {
+                Storage::delete($product->photo);
             }
 
             // Збереження нової фотографії
             $photoPath = $photo->store('photos');
-            $phone->photo = $photoPath;
+            $product->photo = $photoPath;
         }
 
-        $phone->save();
+        $product->save();
 
         // Перенаправлення на потрібну сторінку після оновлення
         return redirect()->route('admin.dashboard');
@@ -130,28 +130,28 @@ class PhoneController extends Controller
 
     public function index()
     {
-        $phones = Phone::all();
+        $products = product::all();
         $cartCount = CartItem::where('user_id', Auth::id())->count();
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
 
-        return view('admin.phones.index', compact('phones', 'cartCount'), ['totalQuantity' => $totalQuantity]);
+        return view('admin.products.index', compact('products', 'cartCount'), ['totalQuantity' => $totalQuantity]);
     }
 
     public function show($id)
     {
-        $phone = Phone::find($id);
+        $product = product::find($id);
 
         $cartCount = CartItem::where('user_id', Auth::id())->count();
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
 
-        return view('admin.phones.details', compact('phone', 'cartCount'), ['totalQuantity' => $totalQuantity]);
+        return view('admin.products.details', compact('product', 'cartCount'), ['totalQuantity' => $totalQuantity]);
     }
 }

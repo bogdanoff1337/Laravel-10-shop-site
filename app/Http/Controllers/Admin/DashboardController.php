@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Phone;
+
 use App\Models\User;
 use App\Models\StatusOrder;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -16,7 +17,7 @@ class DashboardController extends Controller
     public function index()
     {
         $users = User::all();
-        $phones = Phone::all();
+        $phones = Product::all();
         $orders = Order::with('items.phone', 'user')->get();
 
         $groupedOrders = $orders->groupBy('order_number');

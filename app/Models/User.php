@@ -10,7 +10,6 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    protected $table = 'users';
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -43,8 +42,4 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    public function order()
-    {
-        return $this->hasOne(Order::class);
-    }
 }
