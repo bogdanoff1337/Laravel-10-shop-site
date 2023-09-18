@@ -13,7 +13,7 @@
                 <a class="nav-link active" id="users-tab" data-toggle="tab" href="#users">Users</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="phones-tab" data-toggle="tab" href="#phones">Phones</a>
+                <a class="nav-link" id="products-tab" data-toggle="tab" href="#products">Products</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders">Orders</a>
@@ -49,41 +49,33 @@
                 </table>
             </div>
 
-            <div class="tab-pane fade" id="phones">
-                <h2>Phones</h2>
+            <div class="tab-pane fade" id="products">
+                <h2>Products</h2>
                 <table class="table">
                     <thead>
                         <tr>
-                            
-                            <th>Brand</th>
-                            <th>Model</th>
-                            <th>Color</th>
+                            <th>Name</th>
+                            <th>description</th>
+                            <th>stock_quantity</th>
                             <th>Price</th>
-                            <th>RAM</th>
-                            <th>Screen Size</th>
-                            <th>Storage</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($phones as $phone)
+                        @foreach ($products as $product)
                             <tr>
-                                <td>{{ $phone->brand }}</td>
-                                <td>{{ $phone->model }}</td>
-                                <td>{{ $phone->color }}</td>
-                                <td>{{ $phone->price }}</td>
-                                <td>{{ $phone->ram }}</td>
-                                <td>{{ $phone->screen_size }}</td>
-                                <td>{{ $phone->storage }}</td>
+                                <td>{{ $product->name }}</td>
+                                <td>{{ $product->description }}</td>
+                                <td>{{ $product->stock_quantity }}</td>
+                                <td>{{ $product->price }}</td>
                                 <td>
-                                    <form action="{{ route('admin.phones.delete', $phone->id) }}" method="POST">
+                                    <form action="{{ route('admin.products.delete', $product->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.phones.edit', $phone->id) }}" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary">Edit</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -98,7 +90,7 @@
                         <tr>
                             <th>Order Number</th>
                             <th>User</th>
-                            <th>Phone</th>
+                            <th>Product</th>
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Status</th>
@@ -119,10 +111,10 @@
                                             @if ($itemIndex > 0)
                                                 <br>
                                             @endif
-                                            @if ($item->phone)
-                                                {{ $item->phone->brand }} - {{ $item->phone->model }}
+                                            @if ($item->product)
+                                                {{ $item->product->name }} - {{ $item->product->description }}
                                             @else
-                                                No Phone available
+                                                No product available
                                             @endif
                                         @endforeach
                                     </td>
@@ -131,8 +123,8 @@
                                             @if ($itemIndex > 0)
                                                 <br>
                                             @endif
-                                            @if ($item->phone)
-                                                {{ $item->phone->price }}$
+                                            @if ($item->product)
+                                                {{ $item->product->price }}$
                                             @else
                                                 No price available
                                             @endif

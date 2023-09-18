@@ -8,7 +8,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Phone</th>
+                        <th>Product</th>
                         <th>Price $</th>
                         <th>Quantity</th>
                         <th>Total</th>
@@ -23,15 +23,15 @@
                     <tr>
                         <td>
                             <div style="display: flex; align-items: center;">
-                                <img src="{{ Storage::url($cartItem->phone->photo) }}" alt="Phone Photo" style="width: 100px; margin-right: 10px;">
+                                <img src="{{ Storage::url($cartItem->product->photo) }}" alt="product Photo" style="width: 100px; margin-right: 10px;">
                                 <div>
-                                    <p style="margin: 0;">{{ $cartItem->phone->brand }}</p>
-                                    <p style="margin: 0;">{{ $cartItem->phone->model }}</p>
+                                    <p style="margin: 0;">{{ $cartItem->product->name }}</p>
+                                    <p style="margin: 0;">{{ $cartItem->product->description }}</p>
                                 </div>
                             </div>
                             </td>
                         
-                            <td>{{ $cartItem->phone->price }} $</td>
+                            <td>{{ $cartItem->product->price }} $</td>
 
                         <td>
                             <div class="d-flex align-items-center">
@@ -46,7 +46,7 @@
                                 </form>
                             </div>
                         </td>
-                        <td>{{ $cartItem->phone->price * $cartItem->quantity }} $</td>
+                        <td>{{ $cartItem->product->price * $cartItem->quantity }} $</td>
                         <td>
                             
                             <form id="remove-form-{{ $cartItem->id }}" action="{{ route('cart.remove', $cartItem->id) }}" method="POST" style="display: none;">

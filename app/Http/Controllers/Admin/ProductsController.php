@@ -26,24 +26,18 @@ class ProductsController extends Controller
     public function store(Request $request)
     {
         // Отримання даних з форми
-        $brand = $request->input('brand');
-        $model = $request->input('model');
+        $name = $request->input('name');
+        $description = $request->input('description');
         $price = $request->input('price');
-        $color = $request->input('color');
-        $storage = $request->input('storage');
-        $screenSize = $request->input('screen_size');
-        $ram = $request->input('ram');
+        $stock_quantity = $request->input('stock_quantity');
         $photo = $request->file('photo');
 
         // Збереження нового запису телефону
         $product = new product();
-        $product->brand = $brand;
-        $product->model = $model;
+        $product->name = $name;
+        $product->description  = $description ;
         $product->price = $price;
-        $product->color = $color;
-        $product->storage = $storage;
-        $product->screen_size = $screenSize;
-        $product->ram = $ram;
+        $product->stock_quantity  = $stock_quantity ;
 
         // Завантаження фотографії
         if ($photo) {
@@ -89,26 +83,22 @@ class ProductsController extends Controller
     public function update(Request $request, $id)
     {
         // Отримання даних з форми
-        $brand = $request->input('brand');
-        $model = $request->input('model');
+        $name = $request->input('name');
+        $description = $request->input('description');
         $price = $request->input('price');
-        $color = $request->input('color');
-        $storage = $request->input('storage');
-        $screenSize = $request->input('screen_size');
-        $ram = $request->input('ram');
+        $stock_quantity = $request->input('stock_quantity');
+       
         $photo = $request->file('photo');
 
         // Знайдіть телефон за його ідентифікатором
         $product = product::find($id);
 
         // Оновити дані телефону
-        $product->brand = $brand;
-        $product->model = $model;
+        $product->name = $name;
+        $product->description = $description;
         $product->price = $price;
-        $product->color = $color;
-        $product->storage = $storage;
-        $product->screen_size = $screenSize;
-        $product->ram = $ram;
+        $product->stock_quantity = $stock_quantity;
+    
 
         // Зміна фотографії
         if ($photo) {
@@ -130,7 +120,7 @@ class ProductsController extends Controller
 
     public function index()
     {
-        $products = product::all();
+        $products = Product::all();
         $cartCount = CartItem::where('user_id', Auth::id())->count();
         $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
         $totalQuantity = 0;

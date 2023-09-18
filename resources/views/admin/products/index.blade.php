@@ -6,22 +6,23 @@
             @foreach($products as $product)
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="{{ Storage::url($phone->photo) }}" alt="Phone Photo" class="card-img-top zoom-effect">
+                    <img src="{{ Storage::url($product->photo) }}" alt="Product Photo" class="card-img-top zoom-effect img-fluid">
+                    
                     <div class="card-body">
-                        <h5 class="card-title">{{ $phone->model }}</h5>
-                        <p class="card-text">Price: ${{ $phone->price }}</p>
+                        <h5 class="card-title">{{ $product->name }}</h5>
+                        <p class="card-text">Price: ${{ $product->price }}</p>
                        
                         
-                        <div class="phone-features" style="display: none;">
-                            <p>Color: {{ $phone->color }}</p>
-                            <p>RAM: {{ $phone->ram }}</p>
-                            <p>Storage: {{ $phone->storage }}</p>
-                            <form  action="{{ route('cart.add', $phone->id) }}" method="POST">
+                        <div class="product-features" style="display: none;">
+                            <p>Description: {{ $product->description }}</p>
+                            <p>Stock quantity: {{ $product->stock_quantity }}</p>
+                            
+                            <form  action="{{ route('cart.add', $product->id) }}" method="POST">
                                 @csrf
-                                <input type="hidden" name="id" value="{{ $phone->id }}">
+                                <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="hidden" name="quantity" value="1">
                                 <button type="submit" class="btn btn-secondary ">
-                                    <i class="bi bi-cart-fill"></i>
+                                    Add to cart <i class="bi bi-cart-plus"></i>
                                 </button>
                             </form>
                             
@@ -39,10 +40,10 @@
         $(document).ready(function() {
             $('.card').hover(
                 function() {
-                    $(this).find('.phone-features').slideDown(); // Відображення характеристик при наведенні
+                    $(this).find('.product-features').slideDown(); // Відображення характеристик при наведенні
                 },
                 function() {
-                    $(this).find('.phone-features').slideUp(); // Приховування характеристик при знятті наведення
+                    $(this).find('.product-features').slideUp(); // Приховування характеристик при знятті наведення
                 }
             );
         });

@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderItem extends Model
 {
-    protected $fillable = ['phone_id', 'quantity'];
+    protected $fillable = ['product_id', 'quantity'];
 
     use HasFactory;
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
-    public function phone()
+    public function product()
     {
-        return $this->belongsTo(Phone::class, 'phone_id');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

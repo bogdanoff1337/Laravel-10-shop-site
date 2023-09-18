@@ -7,12 +7,12 @@
                 <h1>Order</h1>
                 @foreach ($cartItems as $cartItem)
                     <div class="d-flex align-items-center mb-4">
-                        <img src="{{ Storage::url($cartItem->phone->photo) }}" alt="Phone Photo" class="mr-3" style="width: 100px;">
+                        <img src="{{ Storage::url($cartItem->product->photo) }}" alt="product Photo" class="mr-3" style="width: 100px;">
                         <div>
-                            <p  style="margin: 0;">{{ $cartItem->phone->brand }}</p>
-                            <p  style="margin: 0;">{{ $cartItem->phone->model }}</p>
+                            <p  style="margin: 0;">{{ $cartItem->product->name }}</p>
+                            <p  style="margin: 0;">{{ $cartItem->product->description }}</p>
                             <p  style="margin: 0;">Кількість: {{ $cartItem->quantity }}</p>
-                            <p  style="margin: 0;">Price: {{ $cartItem->phone->price }} $</p>
+                            <p  style="margin: 0;">Price: {{ $cartItem->product->price }} $</p>
                         </div>
                     </div>
                 @endforeach
@@ -45,7 +45,7 @@
                         <input type="text" name="delivery_city" id="delivery_city" class="form-control" required>
                     </div>
             
-                    <button type="submit" class="btn btn-primary">Оформити замовлення</button>
+                    <button type="submit" class="btn btn-primary mt-3">Оформити замовлення</button>
                 </form>
             </div>
         </div>

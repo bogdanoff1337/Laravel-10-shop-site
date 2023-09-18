@@ -17,19 +17,19 @@ class DashboardController extends Controller
     public function index()
     {
         $users = User::all();
-        $phones = Product::all();
-        $orders = Order::with('items.phone', 'user')->get();
+        $products = Product::all();
+        $orders = Order::with('items.product', 'user')->get();
 
         $groupedOrders = $orders->groupBy('order_number');
         // кошик
         $total = 0;
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
 
-        return view('admin.dashboard', compact('users', 'phones', 'orders', 'groupedOrders'), ['cartItems' => $cartItems, 'total' => $total, 'totalQuantity' => $totalQuantity]);
+        return view('admin.dashboard', compact('users', 'products', 'orders', 'groupedOrders'), ['cartItems' => $cartItems, 'total' => $total, 'totalQuantity' => $totalQuantity]);
     }
 
     // ...

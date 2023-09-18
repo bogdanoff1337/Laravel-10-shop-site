@@ -22,7 +22,7 @@ Auth::routes();
 |
 */
 
-
+Route::get('/', [ProductsController::class, 'index'])->name('home');
 Route::get('/home', [ProductsController::class, 'index'])->name('home');
 // admin panel
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');

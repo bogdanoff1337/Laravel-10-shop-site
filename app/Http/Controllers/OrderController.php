@@ -7,18 +7,18 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CartItem;
 use App\Models\StatusOrder;
-use App\Models\Phone;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
     public function showOrderForm(Request $request)
     {
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
 
         // Кошик
         $total = 0;
         foreach ($cartItems as $cartItem) {
-            $total += $cartItem->phone->price * $cartItem->quantity;
+            $total += $cartItem->product->price * $cartItem->quantity;
         }
 
         $totalQuantity = 0;
@@ -51,7 +51,7 @@ class OrderController extends Controller
         // Зберегти товари з кошика як елементи замовлення
         foreach ($cartItems as $cartItem) {
             $order->items()->create([
-                'phone_id' => $cartItem->phone_id,
+                'product_id' => $cartItem->product_id,
                 'quantity' => $cartItem->quantity,
             ]);
         }
@@ -72,14 +72,14 @@ class OrderController extends Controller
         }
 
         foreach ($orders as $order) {
-            $order->load('items.phone');
+            $order->load('items.product');
         }
 
         // Кошик
-        $cartItems = CartItem::with('phone')->where('user_id', $user->id)->get();
+        $cartItems = CartItem::with('product')->where('user_id', $user->id)->get();
         $total = 0;
         foreach ($cartItems as $cartItem) {
-            $total += $cartItem->phone->price * $cartItem->quantity;
+            $total += $cartItem->product->price * $cartItem->quantity;
         }
 
         $totalQuantity = 0;

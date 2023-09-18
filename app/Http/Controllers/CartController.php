@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Phone;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\CartItem;
@@ -12,11 +12,11 @@ class CartController extends Controller
 {
     public function show()
     {
-        $cartItems = CartItem::with('phone')->where('user_id', Auth::id())->get();
+        $cartItems = CartItem::with('Product')->where('user_id', Auth::id())->get();
 
         $total = 0;
         foreach ($cartItems as $cartItem) {
-            $total += $cartItem->phone->price * $cartItem->quantity;
+            $total += $cartItem->Product->price * $cartItem->quantity;
         }
 
         $totalQuantity = 0;
@@ -39,12 +39,12 @@ class CartController extends Controller
         $quantity = $request->input('quantity');
 
         // Отримати інформацію про телефон за його ідентифікатором
-        $phone = Phone::findOrFail($productId);
+        $Product = Product::findOrFail($productId);
 
         // Створити новий запис у таблиці cart_items для поточного користувача та обраного товару
         $cartItem = new CartItem;
         $cartItem->user_id = Auth::id();
-        $cartItem->phone_id = $phone->id; // Встановити значення для поля phone_id
+        $cartItem->Product_id = $Product->id; // Встановити значення для поля Product_id
         $cartItem->quantity = $quantity;
         $cartItem->save();
 

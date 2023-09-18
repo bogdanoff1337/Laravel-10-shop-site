@@ -8,7 +8,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Phone</th>
+                        <th>Product</th>
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Your Name</th>
@@ -20,21 +20,21 @@
                     @foreach ($order->items as $item)
                         <tr>
                             <td>
-                                @if ($item->phone)
+                                @if ($item->product)
                                     <div style="display: flex; align-items: center;">
-                                        <img src="{{ Storage::url($item->phone->photo) }}" alt="Phone Photo" style="width: 100px; margin-right: 10px;">
+                                        <img src="{{ Storage::url($item->product->photo) }}" alt="product Photo" style="width: 100px; margin-right: 10px;">
                                         <div>
-                                            <p style="margin: 0;">{{ $item->phone->brand }}</p>
-                                            <p style="margin: 0;">{{ $item->phone->model }}</p>
+                                            <p style="margin: 0;">{{ $item->product->name }}</p>
+                                            <p style="margin: 0;">{{ $item->product->description }}</p>
                                         </div>
                                     </div>
                                 @else
-                                    No Phone available
+                                    No product available
                                 @endif
                             </td>
                             <td>
-                                @if ($item->phone)
-                                    {{ $item->phone->price }}$
+                                @if ($item->product)
+                                    {{ $item->product->price }}$
                                 @else
                                     No price available
                                 @endif
@@ -51,7 +51,7 @@
                         <td colspan="5"></td>
                         <td colspan="3">
                             <strong>Total:</strong> {{ $order->items->sum(function ($item) {
-                                return $item->phone ? $item->phone->price * $item->quantity : 0;
+                                return $item->product ? $item->product->price * $item->quantity : 0;
                             }) }}$
                             <br>
                             <strong>Status:</strong>{{ $order->statusOrder ? $order->statusOrder->status : '' }}
