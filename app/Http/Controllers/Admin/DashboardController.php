@@ -23,16 +23,21 @@ class DashboardController extends Controller
         $groupedOrders = $orders->groupBy('order_number');
         // кошик
         $total = 0;
+
         $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item['quantity'];
-        }
 
-        return view('admin.dashboard', compact('users', 'products', 'orders', 'groupedOrders'), ['cartItems' => $cartItems, 'total' => $total, 'totalQuantity' => $totalQuantity]);
+        $cartCount = $this->getCartQuantity(Auth::id());
+
+        return view('admin.dashboard', [
+            'users' => $users,
+            'products' => $products,
+            'orders' => $orders,
+            'groupedOrders' => $groupedOrders,
+            'cartItems' => $cartItems,
+            'total' => $total,
+            'cartCount' => $cartCount,
+        ]);
     }
-
-    // ...
 
     public function updateOrderStatus(Request $request, $orderId)
     {
@@ -67,4 +72,17 @@ class DashboardController extends Controller
 
         return redirect()->back()->with('success', 'Order deleted successfully.');
     }
+
+    public function getCartQuantity(int $userId): int
+    {
+        $cartItems = CartItem::where('user_id', $userId)->get();
+    
+        $totalQuantity = 0;
+        foreach ($cartItems as $item) {
+            $totalQuantity += $item['quantity'];
+        }
+    
+        return $totalQuantity;
+    }
+    
 }

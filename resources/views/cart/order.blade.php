@@ -15,6 +15,7 @@
                             <p  style="margin: 0;">Price: {{ $cartItem->product->price }} $</p>
                         </div>
                     </div>
+                   
                 @endforeach
                 <p><h4>Total: {{ $total }}$</h4></p>
             </div>

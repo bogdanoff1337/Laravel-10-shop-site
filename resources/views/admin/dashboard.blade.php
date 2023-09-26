@@ -1,6 +1,5 @@
 <!-- resources/views/admin/index.blade.php -->
 
-@include('partials.flash-message')
 
 @extends('layouts.app')
 
@@ -169,17 +168,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const tabs = document.querySelectorAll('.nav-link');
+    const tabs = document.querySelectorAll('.nav-link');
 
-            tabs.forEach(function (tab) {
-                tab.addEventListener('click', function (event) {
-                    event.preventDefault();
-                    document.querySelector('.nav-link.active').classList.remove('active');
-                    document.querySelector('.tab-pane.fade.show.active').classList.remove('show', 'active');
-                    this.classList.add('active');
-                    document.querySelector(this.getAttribute('href')).classList.add('show', 'active');
-                });
-            });
+    tabs.forEach(function (tab) {
+        tab.addEventListener('click', function (event) {
+            event.preventDefault();
+            const activeNavLink = document.querySelector('.nav-link.active');
+            const activeTabPane = document.querySelector('.tab-pane.fade.show.active');
+            
+            if (activeNavLink) {
+                activeNavLink.classList.remove('active');
+            }
+            
+            if (activeTabPane) {
+                activeTabPane.classList.remove('show', 'active');
+            }
+
+            this.classList.add('active');
+            const targetTabPane = document.querySelector(this.getAttribute('href'));
+            
+            if (targetTabPane) {
+                targetTabPane.classList.add('show', 'active');
+            }
         });
+    });
+});
+
     </script>
 @endsection

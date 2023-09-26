@@ -8,20 +8,42 @@ use App\Models\product;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class ProductsController extends Controller
 {
-    public function create()
+    
+    public function index()
     {
-        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
+    $products = Product::orderBy('created_at', 'desc')->get();
+
+    foreach ($products as $product) {
+        $product->description = substr($product->description, 0, 60); // Обрізка до перших 60 символів
+    }
+
+    $cartCount = $this->getCartQuantity(Auth::id());
+
+    return view('admin.products.index', compact('products', 'cartCount'));
+    }
+
+    public function getCartQuantity($userId = null): int
+    {
+        $cartItems = CartItem::where('user_id', $userId)->get();
+    
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
-
-        return view('admin.products.create', ['totalQuantity' => $totalQuantity]);
+    
+        return $totalQuantity;
     }
+
+    public function create()
+    {
+        $cartCount = $this->getCartQuantity(Auth::id());
+    
+        return view('admin.products.create', ['cartCount' => $cartCount]);
+    }
+    
 
     public function store(Request $request)
     {
@@ -62,22 +84,20 @@ class ProductsController extends Controller
             $product->delete();
 
             // Повертаємо користувача на потрібну сторінку з повідомленням про успішне видалення
-            return redirect()->route('admin.dashboard')->with('success', 'Телефон успішно видалено.');
+            return redirect()->route('admin.dashboard')->with('success', 'Product is deleted.' );
         } else {
             // Якщо телефон не знайдено, повертаємо користувача на потрібну сторінку з повідомленням про помилку
-            return redirect()->route('admin.dashboard')->with('error', 'Телефон не знайдено.');
+            return redirect()->route('admin.dashboard')->with('error', 'Product is not found');
         }
     }
 
     public function edit($id)
     {
-        $product = product::find($id);
-        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item['quantity'];
-        }
-        return view('admin.products.edit', compact('product'), ['totalQuantity' => $totalQuantity]);
+        $product = Product::find($id);
+    
+        $cartCount = $this->getCartQuantity(Auth::id());
+    
+        return view('admin.products.edit', compact('product', 'cartCount'));
     }
 
     public function update(Request $request, $id)
@@ -118,30 +138,12 @@ class ProductsController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    public function index()
-    {
-        $products = Product::all();
-        $cartCount = CartItem::where('user_id', Auth::id())->count();
-        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item['quantity'];
-        }
-
-        return view('admin.products.index', compact('products', 'cartCount'), ['totalQuantity' => $totalQuantity]);
-    }
-
     public function show($id)
     {
-        $product = product::find($id);
-
-        $cartCount = CartItem::where('user_id', Auth::id())->count();
-        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item['quantity'];
-        }
-
-        return view('admin.products.details', compact('product', 'cartCount'), ['totalQuantity' => $totalQuantity]);
+        $product = Product::find($id);
+    
+        $cartCount = $this->getCartQuantity(Auth::id());
+    
+        return view('admin.products.details', compact('product', 'cartCount'));
     }
 }

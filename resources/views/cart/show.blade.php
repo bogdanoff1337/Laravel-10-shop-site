@@ -34,18 +34,21 @@
                             <td>{{ $cartItem->product->price }} $</td>
 
                         <td>
-                            <div class="d-flex align-items-center">
-                                <form action="{{ route('cart.decrement', $cartItem->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-danger">-</button>
-                                </form>
-                                <span class="mx-2">{{ $cartItem->quantity }}</span>
-                                <form action="{{ route('cart.increment', $cartItem->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-success">+</button>
-                                </form>
-                            </div>
+                            <form method="POST" action="{{ route('cart.update') }}">
+                                @csrf
+                                <input type="hidden" name="cartItemId" value="{{ $cartItem->id }}">
+                                
+                                <div class="input-group mb-3">
+                                    <input type="number" name="quantity" value="{{ $cartItem->quantity }}" min="1" class="form-control rounded-pill">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-primary ">
+                                            <i class="bi bi-check-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form> 
                         </td>
+
                         <td>{{ $cartItem->product->price * $cartItem->quantity }} $</td>
                         <td>
                             
@@ -54,7 +57,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Remove</button>
                             </form>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="confirmRemove({{ $cartItem->id }})">Remove</button>
+                            <button type="button" class="btn  btn-danger" onclick="confirmRemove({{ $cartItem->id }})">Remove</button>
                         </td>
                         <script>
                             function confirmRemove(cartItemId) {
@@ -85,4 +88,6 @@
             <p>Your cart is empty.</p>
         @endif
     </div>
+    
+
 @endsection

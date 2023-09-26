@@ -38,14 +38,17 @@ Route::put('/orders/{orderId}', [DashboardController::class, 'updateOrderStatus'
 // store page and details 
 Route::get('/store', [ProductsController::class, 'index'])->name('admin.products.index');
 Route::post('/products', [ProductsController::class, 'store'])->name('admin.products.store');
-Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::get('/search', [ProductsController::class, 'search']);
+Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
+Route::get('/load-more-products', [ProductsController::class, 'loadMoreProducts']);
 
-// cart
+
+
+// cart 
+Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.show');
-Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('cart/increment/{cartItemId}', [CartController::class, 'increment'])->name('cart.increment');
-Route::post('cart/decrement/{cartItemId}', [CartController::class, 'decrement'])->name('cart.decrement');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
 Route::post('/cart/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
 Route::get('/cart/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');

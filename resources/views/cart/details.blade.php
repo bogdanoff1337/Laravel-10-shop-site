@@ -3,6 +3,9 @@
 @section('content')
     <div class="container">
         <h1>My Orders</h1>
+        @if ($orders->isEmpty())
+        <p>You have no orders.</p>
+    @else
         @foreach ($orders as $order)
             <h2>Order Number: {{ $order->order_number }}</h2>
             <table class="table">
@@ -60,5 +63,6 @@
                 </tfoot>
             </table>
         @endforeach
+    @endif
     </div>
 @endsection
