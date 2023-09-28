@@ -13,9 +13,6 @@
                         <th>Quantity</th>
                         <th>Total</th>
                         <th>Action</th>
-
-                        
-                        
                     </tr>
                 </thead>
                 <tbody>
@@ -34,7 +31,7 @@
                             <td>{{ $cartItem->product->price }} $</td>
 
                         <td>
-                            <form method="POST" action="{{ route('cart.update') }}">
+                            <form method="POST" action="{{ route('cart.updateQuantityProduct') }}">
                                 @csrf
                                 <input type="hidden" name="cartItemId" value="{{ $cartItem->id }}">
                                 

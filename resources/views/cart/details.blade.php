@@ -13,6 +13,7 @@
                     <tr>
                         <th>Product</th>
                         <th>Price</th>
+                        <th>Data</th>
                         <th>Quantity</th>
                         <th>Your Name</th>
                         <th>Payment Method</th>
@@ -42,6 +43,7 @@
                                     No price available
                                 @endif
                             </td>
+                            <td>{{ $item->created_at }}</td>
                             <td>{{ $item->quantity }}</td>
                             <td>{{ $order->first_name }} {{ $order->last_name }}</td>
                             <td>{{ $order->payment_method }}</td>

@@ -4,17 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\StatusOrder;
 use App\Models\CartItem;
+use App\Models\OrderItem;
 use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $users = User::all();
         $products = Product::all();
@@ -39,7 +42,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function updateOrderStatus(Request $request, $orderId)
+    public function updateOrderStatus(Request $request, int $orderId) : RedirectResponse
     {
         $order = Order::findOrFail($orderId);
 
@@ -53,14 +56,40 @@ class DashboardController extends Controller
         $statusOrder->status = $request->input('status');
         $statusOrder->save();
 
-        // Отримання оновленого статусу замовлення
-        $updatedStatus = $statusOrder->status;
-
-        // Повернення відповіді з оновленим статусом замовлення
-        return redirect()->back()->with('success', 'Order status update.');
+        return Redirect()->back()->with('success', 'Order status update.');
     }
 
-    public function deleteOrder($orderId)
+    public function deleteProduct(string $id): RedirectResponse
+    {
+        // Знаходження продукту за його ідентифікатором
+        $product = Product::find($id);
+    
+        // Перевірка, чи продукт знайдено
+        if ($product) {
+            // Перевірка, чи є замовлення, які мають цей продукт
+            $ordersWithProduct = OrderItem::where('product_id', $product->id)->exists();
+    
+            if ($ordersWithProduct) {
+                // Якщо є замовлення з цим продуктом, встановити флеш-повідомлення про неможливість видалення
+                Session::flash('error', 'Product cannot be deleted because it is associated with existing orders.');
+            } else {
+                // Виконуємо видалення продукту, якщо його можна видалити
+                $product->forceDelete();
+    
+                // Встановлюємо флеш-повідомлення про успішне видалення
+                Session::flash('success', 'Product is deleted.');
+            }
+        } else {
+            // Якщо продукт не знайдено, встановити флеш-повідомлення про помилку
+            Session::flash('error', 'Product is not found');
+        }
+    
+        // Повертаємо користувача на потрібну сторінку
+        return redirect()->route('admin.dashboard');
+    }
+    
+
+    public function deleteOrder(int $orderId): RedirectResponse
     {
         $order = Order::findOrFail($orderId);
 
@@ -70,7 +99,7 @@ class DashboardController extends Controller
         // Видалити замовлення
         $order->delete();
 
-        return redirect()->back()->with('success', 'Order deleted successfully.');
+        return Redirect()->back()->with('success', 'Order deleted successfully.');
     }
 
     public function getCartQuantity(int $userId): int

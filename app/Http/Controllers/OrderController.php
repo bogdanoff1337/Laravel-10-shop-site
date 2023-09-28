@@ -7,12 +7,13 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use App\Models\CartItem;
 use App\Models\StatusOrder;
-use App\Models\Product;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class OrderController extends Controller
 {
 
-    public function showOrderForm(Request $request)
+    public function showOrderForm(): View
     {
 
         $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
@@ -29,7 +30,7 @@ class OrderController extends Controller
 
     }
 
-    public function placeOrder(Request $request)
+    public function placeOrder(Request $request): RedirectResponse
     {
 
          // Отримати дані з кошика
@@ -61,14 +62,15 @@ class OrderController extends Controller
          // Видалити товари з кошика
          $cartItems->each->delete();
 
-         return redirect()->route('cart.details')->with('success', 'Order placed successfully.');
+         return Redirect()->route('cart.details')->with('success', 'Order placed successfully.');
 
     }
 
-    public function showOrderDetails()
+    public function showOrderDetails(): View
     {
 
         $user = auth()->user();
+        
         $orders = Order::where('user_id', $user->id)->get();
 
         foreach ($orders as $order) {
@@ -87,7 +89,7 @@ class OrderController extends Controller
 
     }
 
-    public function removeAll()
+    public function removeAll(): RedirectResponse
     {
 
         // Знайти всі елементи кошика для поточного користувача
@@ -98,7 +100,7 @@ class OrderController extends Controller
             $cartItem->delete();
         }
 
-        return redirect()->back()->with('success', 'All products removed from cart successfully.');
+        return Redirect()->back()->with('success', 'All products removed from cart successfully.');
 
     }
 

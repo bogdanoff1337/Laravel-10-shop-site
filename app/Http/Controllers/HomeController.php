@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Models\Order;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Contracts\View\View;
+
 
 class HomeController extends Controller
 {
@@ -27,7 +28,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index() : View
     {
         // Retrieve the order from the database
         $order = app('order');

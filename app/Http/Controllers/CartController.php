@@ -4,33 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Gloudemans\Shoppingcart\Facades\Cart;
 use App\Models\CartItem;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function getCartQuantity()
-    {
-        $cartItems = CartItem::where('user_id', Auth::id())->get();
+    
 
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item->quantity;
-        }
-
-        return $totalQuantity;
-    }
-
-    public function index()
+    public function index(): View
     {
 
     if (auth()->check()) {
+
         $userId = auth()->id();
+
         $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
 
         $total = $cartItems->sum(function ($item) {
+
             return $item->product->price * $item->quantity;
+
         });
 
         $cartCount = $this->getCartQuantity(Auth::id());
@@ -45,7 +40,7 @@ class CartController extends Controller
     }
 
 
-    public function add(Request $request)
+    public function add(Request $request): RedirectResponse
     {
 
         if (!Auth::check()) {
@@ -68,11 +63,11 @@ class CartController extends Controller
 
 
 
-        return redirect()->back()->with('success', 'Product added to cart successfully.');
+        return Redirect()->back()->with('success', 'Product added to cart successfully.');
 
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
     $cartItemId = $request->input('cartItemId');
     $quantity = $request->input('quantity');
@@ -83,12 +78,12 @@ class CartController extends Controller
         $cartItem->save();
     }
 
-    return redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
+    return Redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
     }
 
     
 
-    public function remove($cartItemId)
+    public function remove($cartItemId): RedirectResponse
     {
 
         // Знайти та видалити елемент кошика з вказаним ID
@@ -98,7 +93,7 @@ class CartController extends Controller
         // Виконати видалення елемента кошика
         $cartItem->delete();
 
-        return redirect()->back()->with('success', 'Product removed from cart successfully.');
+        return Redirect()->back()->with('success', 'Product removed from cart successfully.');
 
     }
 
@@ -116,40 +111,15 @@ class CartController extends Controller
 
     }
 
-    public function increment($cartItemId)
+    public function getCartQuantity(int $userId): int
     {
+        $cartItems = CartItem::where('user_id', Auth::id())->get();
 
-    $cartItem = CartItem::find($cartItemId);
-    if ($cartItem) {
-        $cartItem->quantity++;
-        $cartItem->save();
-    }
+        $totalQuantity = 0;
+        foreach ($cartItems as $item) {
+            $totalQuantity += $item->quantity;
+        }
 
-    return redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
-
-    }
-
-    public function decrement($cartItemId)
-    {
-
-    $cartItem = CartItem::find($cartItemId);
-    if ($cartItem && $cartItem->quantity > 1) {
-        $cartItem->quantity--;
-        $cartItem->save();
-    }
-
-    return redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
-
-    }
-
-
-    public function removeAll($userId)
-    {
-
-        // Знайти та видалити всі елементи кошика для вказаного користувача
-        CartItem::where('user_id', $userId)->delete();
-
-        return redirect()->back()->with('success', 'All products removed from cart successfully.');
-        
+        return $totalQuantity;
     }
 }

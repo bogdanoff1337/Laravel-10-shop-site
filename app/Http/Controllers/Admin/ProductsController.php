@@ -7,13 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\product;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CartItem;
+
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
     
-    public function index()
+    public function index(): View
     {
+
     $products = Product::orderBy('created_at', 'desc')->get();
 
     foreach ($products as $product) {
@@ -37,7 +41,7 @@ class ProductsController extends Controller
         return $totalQuantity;
     }
 
-    public function create()
+    public function create(): View
     {
         $cartCount = $this->getCartQuantity(Auth::id());
     
@@ -45,7 +49,7 @@ class ProductsController extends Controller
     }
     
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         // Отримання даних з форми
         $name = $request->input('name');
@@ -69,29 +73,11 @@ class ProductsController extends Controller
 
         $product->save();
 
-        // Перенаправлення на потрібну сторінку після збереження
-        return redirect()->route('admin.products.index');
+        
+        return Redirect()->route('admin.products.index');
     }
 
-    public function destroy($id)
-    {
-        // Знаходження телефону за його ідентифікатором
-        $product = product::find($id);
-
-        // Перевірка, чи телефон знайдено
-        if ($product) {
-            // Виконуємо видалення телефону
-            $product->delete();
-
-            // Повертаємо користувача на потрібну сторінку з повідомленням про успішне видалення
-            return redirect()->route('admin.dashboard')->with('success', 'Product is deleted.' );
-        } else {
-            // Якщо телефон не знайдено, повертаємо користувача на потрібну сторінку з повідомленням про помилку
-            return redirect()->route('admin.dashboard')->with('error', 'Product is not found');
-        }
-    }
-
-    public function edit($id)
+    public function edit(string $id): View
     {
         $product = Product::find($id);
     
@@ -100,7 +86,7 @@ class ProductsController extends Controller
         return view('admin.products.edit', compact('product', 'cartCount'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
         // Отримання даних з форми
         $name = $request->input('name');
@@ -138,7 +124,7 @@ class ProductsController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    public function show($id)
+    public function show(string $id): View
     {
         $product = Product::find($id);
     

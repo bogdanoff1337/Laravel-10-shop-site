@@ -27,7 +27,7 @@ Route::get('/home', [ProductsController::class, 'index'])->name('home');
 // admin panel
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 Route::delete('/admin/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-Route::delete('/admin/products/{id}', [ProductsController::class, 'destroy'])->name('admin.products.delete');
+Route::delete('/admin/products/{id}', [DashboardController::class, 'deleteProduct'])->name('admin.products.delete');
 Route::get('/admin/products/{id}/edit', [ProductsController::class, 'edit'])->name('admin.products.edit');
 Route::put('/admin/products/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
 Route::delete('/admin/orders/{orderId}', [DashboardController::class, 'deleteOrder'])->name('admin.deleteOrder');
@@ -48,7 +48,7 @@ Route::get('/load-more-products', [ProductsController::class, 'loadMoreProducts'
 Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.show');
 Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updateQuantityProduct');
 Route::post('/cart/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
 Route::post('/cart/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
 Route::get('/cart/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');
