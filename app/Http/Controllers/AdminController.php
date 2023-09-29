@@ -8,23 +8,26 @@ use Illuminate\Http\RedirectResponse;
 
 class AdminController extends Controller
 {
+    public function delete(string $id): RedirectResponse
+    {
+        // Знаходження користувача за його ID
+        $user = User::findOrFail($id);
 
-    public function delete($id): RedirectResponse
-{
-    $user = User::findOrFail($id);
+        // Перевірка, чи у користувача є замовлення в таблиці "orders"
+        $hasOrders = Order::where('user_id', $user->id)->exists();
 
-    // Перевірка, чи у користувача є замовлення в таблиці "orders"
-    $hasOrders = Order::where('user_id', $user->id)->exists();
+        if ($hasOrders) {
+            // Якщо у користувача є замовлення, встановити флеш-повідомлення про неможливість видалення
+            Session::flash('error', 'Користувач має замовлення в таблиці "замовлення" і не може бути видалений.');
+            return redirect()->route('admin.dashboard');
+        }
 
-    if ($hasOrders) {
-        Session::flash('error', 'The user has orders in the orders table and cannot be deleted.');
+        // Виконати видалення користувача
+        $user->delete();
+
+        // Встановити флеш-повідомлення про успішне видалення
+        Session::flash('success', 'Користувача успішно видалено.');
+
         return redirect()->route('admin.dashboard');
     }
-
-    $user->delete();
-
-    Session::flash('success', 'The user has been deleted successfully.');
-    return redirect()->route('admin.dashboard');
-}
-
 }

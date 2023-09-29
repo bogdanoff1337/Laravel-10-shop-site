@@ -19,16 +19,25 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
+        // Отримуємо всіх користувачів
         $users = User::all();
+        
+        // Отримуємо всі продукти
         $products = Product::all();
+        
+        // Отримуємо всі замовлення разом з інформацією про продукти та користувачів
         $orders = Order::with('items.product', 'user')->get();
 
+        // Групуємо замовлення за номерами
         $groupedOrders = $orders->groupBy('order_number');
-        // кошик
+        
+        // Сума для кошика
         $total = 0;
-
+        
+        // Отримуємо всі елементи кошика для поточного користувача
         $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-
+        
+        // Отримуємо загальну кількість товарів у кошику для поточного користувача
         $cartCount = $this->getCartQuantity(Auth::id());
 
         return view('admin.dashboard', [
@@ -42,76 +51,80 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function updateOrderStatus(Request $request, int $orderId) : RedirectResponse
+    public function updateOrderStatus(Request $request, int $orderId): RedirectResponse
     {
+        // Знаходимо замовлення за його ідентифікатором
         $order = Order::findOrFail($orderId);
 
+        // Знаходимо статус замовлення
         $statusOrder = $order->statusOrder;
 
+        // Якщо статус не існує, створюємо новий
         if (!$statusOrder) {
             $statusOrder = new StatusOrder();
             $statusOrder->order_id = $order->id;
         }
 
+        // Оновлюємо статус замовлення
         $statusOrder->status = $request->input('status');
         $statusOrder->save();
 
-        return Redirect()->back()->with('success', 'Order status update.');
+        return Redirect()->back()->with('success', 'Статус замовлення оновлено.');
     }
 
     public function deleteProduct(string $id): RedirectResponse
     {
-        // Знаходження продукту за його ідентифікатором
+        // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);
-    
-        // Перевірка, чи продукт знайдено
+
+        // Перевіряємо, чи продукт був знайдений
         if ($product) {
-            // Перевірка, чи є замовлення, які мають цей продукт
+            // Перевіряємо, чи існують замовлення, які містять цей продукт
             $ordersWithProduct = OrderItem::where('product_id', $product->id)->exists();
-    
+
             if ($ordersWithProduct) {
-                // Якщо є замовлення з цим продуктом, встановити флеш-повідомлення про неможливість видалення
-                Session::flash('error', 'Product cannot be deleted because it is associated with existing orders.');
+                // Якщо є замовлення з цим продуктом, встановлюємо повідомлення про неможливість видалення
+                Session::flash('error', 'Продукт не може бути видалений, оскільки він пов’язаний з наявними замовленнями.');
             } else {
-                // Виконуємо видалення продукту, якщо його можна видалити
+                // Видаляємо продукт, якщо його можна видалити
                 $product->forceDelete();
-    
-                // Встановлюємо флеш-повідомлення про успішне видалення
-                Session::flash('success', 'Product is deleted.');
+
+                // Встановлюємо повідомлення про успішне видалення
+                Session::flash('success', 'Продукт видалено.');
             }
         } else {
-            // Якщо продукт не знайдено, встановити флеш-повідомлення про помилку
-            Session::flash('error', 'Product is not found');
+            // Якщо продукт не було знайдено, встановлюємо повідомлення про помилку
+            Session::flash('error', 'Продукт не знайдено.');
         }
-    
+
         // Повертаємо користувача на потрібну сторінку
         return redirect()->route('admin.dashboard');
     }
-    
 
     public function deleteOrder(int $orderId): RedirectResponse
     {
+        // Знаходимо замовлення за його ідентифікатором
         $order = Order::findOrFail($orderId);
 
-        // Видалити усі пов'язані записи з таблиці `order_items`
+        // Видаляємо всі пов’язані записи з таблиці `order_items`
         $order->items()->delete();
 
-        // Видалити замовлення
+        // Видаляємо саме замовлення
         $order->delete();
 
-        return Redirect()->back()->with('success', 'Order deleted successfully.');
+        return Redirect()->back()->with('success', 'Замовлення успішно видалено.');
     }
 
     public function getCartQuantity(int $userId): int
     {
+        // Отримуємо всі елементи кошика для користувача за його ідентифікатором
         $cartItems = CartItem::where('user_id', $userId)->get();
-    
+
         $totalQuantity = 0;
         foreach ($cartItems as $item) {
             $totalQuantity += $item['quantity'];
         }
-    
+
         return $totalQuantity;
     }
-    
 }

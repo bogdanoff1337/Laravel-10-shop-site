@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use App\Models\CartItem;
-
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -17,20 +16,23 @@ class ProductsController extends Controller
     
     public function index(): View
     {
+        // Отримуємо всі продукти та сортуємо їх за датою створення у зворотньому порядку
+        $products = Product::orderBy('created_at', 'desc')->get();
 
-    $products = Product::orderBy('created_at', 'desc')->get();
+        // Обрізаємо опис продуктів до перших 60 символів
+        foreach ($products as $product) {
+            $product->description = substr($product->description, 0, 60);
+        }
 
-    foreach ($products as $product) {
-        $product->description = substr($product->description, 0, 60); // Обрізка до перших 60 символів
-    }
+        // Отримуємо кількість товарів у кошику користувача
+        $cartCount = $this->getCartQuantity(Auth::id());
 
-    $cartCount = $this->getCartQuantity(Auth::id());
-
-    return view('admin.products.index', compact('products', 'cartCount'));
+        return view('admin.products.index', compact('products', 'cartCount'));
     }
 
     public function getCartQuantity($userId = null): int
     {
+        // Отримуємо всі елементи кошика для користувача за його ідентифікатором
         $cartItems = CartItem::where('user_id', $userId)->get();
     
         $totalQuantity = 0;
@@ -43,6 +45,7 @@ class ProductsController extends Controller
 
     public function create(): View
     {
+        // Отримуємо кількість товарів у кошику користувача
         $cartCount = $this->getCartQuantity(Auth::id());
     
         return view('admin.products.create', ['cartCount' => $cartCount]);
@@ -51,21 +54,21 @@ class ProductsController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // Отримання даних з форми
+        // Отримуємо дані з форми
         $name = $request->input('name');
         $description = $request->input('description');
         $price = $request->input('price');
         $stock_quantity = $request->input('stock_quantity');
         $photo = $request->file('photo');
 
-        // Збереження нового запису телефону
-        $product = new product();
+        // Створюємо новий запис для продукту
+        $product = new Product(); 
         $product->name = $name;
-        $product->description  = $description ;
+        $product->description = $description;
         $product->price = $price;
-        $product->stock_quantity  = $stock_quantity ;
+        $product->stock_quantity = $stock_quantity;
 
-        // Завантаження фотографії
+        // Завантажуємо фотографію
         if ($photo) {
             $photoPath = $photo->store('public/photos');
             $product->photo = $photoPath;
@@ -73,14 +76,16 @@ class ProductsController extends Controller
 
         $product->save();
 
-        
+        // Перенаправляємо на сторінку індексу продуктів
         return Redirect()->route('admin.products.index');
     }
 
     public function edit(string $id): View
     {
+        // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);
     
+        // Отримуємо кількість товарів у кошику користувача
         $cartCount = $this->getCartQuantity(Auth::id());
     
         return view('admin.products.edit', compact('product', 'cartCount'));
@@ -88,7 +93,7 @@ class ProductsController extends Controller
 
     public function update(Request $request, string $id): RedirectResponse
     {
-        // Отримання даних з форми
+        // Отримуємо дані з форми
         $name = $request->input('name');
         $description = $request->input('description');
         $price = $request->input('price');
@@ -96,10 +101,10 @@ class ProductsController extends Controller
        
         $photo = $request->file('photo');
 
-        // Знайдіть телефон за його ідентифікатором
-        $product = product::find($id);
+        // Знаходимо продукт за його ідентифікатором
+        $product = Product::find($id);
 
-        // Оновити дані телефону
+        // Оновлюємо дані продукту
         $product->name = $name;
         $product->description = $description;
         $product->price = $price;
@@ -108,26 +113,28 @@ class ProductsController extends Controller
 
         // Зміна фотографії
         if ($photo) {
-            // Видалення попередньої фотографії, якщо вона існує
+            // Видаляємо попередню фотографію, якщо вона існує
             if ($product->photo) {
                 Storage::delete($product->photo);
             }
 
-            // Збереження нової фотографії
+            // Зберігаємо нову фотографію
             $photoPath = $photo->store('photos');
             $product->photo = $photoPath;
         }
 
         $product->save();
 
-        // Перенаправлення на потрібну сторінку після оновлення
+        // Перенаправляємо на сторінку індексу адміністраторської панелі
         return redirect()->route('admin.dashboard');
     }
 
     public function show(string $id): View
     {
+        // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);
     
+        // Отримуємо кількість товарів у кошику користувача
         $cartCount = $this->getCartQuantity(Auth::id());
     
         return view('admin.products.details', compact('product', 'cartCount'));
