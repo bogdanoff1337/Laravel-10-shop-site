@@ -8,7 +8,7 @@ use Illuminate\Http\RedirectResponse;
 
 class AdminController extends Controller
 {
-    public function delete(string $id): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
         // Знаходження користувача за його ID
         $user = User::findOrFail($id);

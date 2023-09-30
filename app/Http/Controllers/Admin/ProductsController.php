@@ -80,7 +80,7 @@ class ProductsController extends Controller
         return Redirect()->route('admin.products.index');
     }
 
-    public function edit(string $id): View
+    public function edit(int $id): View
     {
         // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);
@@ -91,7 +91,7 @@ class ProductsController extends Controller
         return view('admin.products.edit', compact('product', 'cartCount'));
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, int $id): RedirectResponse
     {
         // Отримуємо дані з форми
         $name = $request->input('name');
@@ -129,7 +129,7 @@ class ProductsController extends Controller
         return redirect()->route('admin.dashboard');
     }
 
-    public function show(string $id): View
+    public function show(int $id): View
     {
         // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);

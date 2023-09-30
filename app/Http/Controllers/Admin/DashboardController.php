@@ -72,7 +72,7 @@ class DashboardController extends Controller
         return Redirect()->back()->with('success', 'Статус замовлення оновлено.');
     }
 
-    public function deleteProduct(string $id): RedirectResponse
+    public function deleteProduct(int $id): RedirectResponse
     {
         // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);

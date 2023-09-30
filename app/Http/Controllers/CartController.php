@@ -80,16 +80,21 @@ class CartController extends Controller
         return Redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
     }
 
-    public function remove($cartItemId): RedirectResponse
-    {
-        // Знаходження та видалення елемента кошика за вказаним ID
-        $cartItem = CartItem::findOrFail($cartItemId);
+    public function remove(int $cartItemId): RedirectResponse
+{
+    // Знаходження елемента кошика за вказаним ID
+    $cartItem = CartItem::find($cartItemId);
 
+    // Перевірка, чи був елемент знайдений
+    if ($cartItem) {
         // Виконання видалення елемента кошика
         $cartItem->delete();
-
         return Redirect()->back()->with('success', 'Товар успішно видалено з кошика.');
+    } else {
+        // Обробка ситуації, коли елемент не знайдено
+        return Redirect()->back()->with('error', 'Товар з вказаним ID не знайдено в кошику.');
     }
+}
 
     public function getCartQuantity(int $userId): int
     {
