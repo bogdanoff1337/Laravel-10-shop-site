@@ -2,66 +2,110 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CartItem;
 use App\Models\Product;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use App\Models\CartItem;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index(): View
     {
-        $userId = auth()->id();
+        // Перевірка, чи користувач автентифікований
+        if (auth()->check()) {
+            // Якщо користувач автентифікований, отримуємо його ID
+            $userId = auth()->id();
 
-        $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
+            // Отримуємо товари з кошика користувача
+            $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
 
-        return view('cart.show', compact('cartItems'));
+            // Розраховуємо загальну суму замовлення на основі товарів у кошику
+            $total = $cartItems->sum(function ($item) {
+                return $item->product->price * $item->quantity;
+            });
+
+            // Отримуємо кількість товарів у кошику користувача
+            $cartCount = $this->getCartQuantity(Auth::id());
+
+            return view('cart.show', compact('cartItems', 'total', 'cartCount'));
+        }
+
+        // Якщо користувач не автентифікований, все одно відображаємо сторінку кошика
+        return view('cart.show', compact('cartItems', 'total', 'cartCount'));
     }
 
-    /**
-     * Show the form for addToCart a new resource.
-     */
-    public function store(Request $request, $userId)
+    public function add(Request $request): RedirectResponse
     {
-        dd($userId);
-        CartItem::create($request->with($userId)->all());
-        return redirect('cart.show')->withSuccessMessage('Item was added to your cart!');
+        // Перевірка, чи користувач автентифікований
+        if (!Auth::check()) {
+            // Якщо користувач не зареєстрований, перенаправляємо його на сторінку логіну з повідомленням
+            return redirect()->route('login')->with('error', 'Будь ласка, увійдіть, щоб додавати товари в кошик.');
+        }
+
+        // Отримання даних про товар, який додається до кошика
+        $productId = $request->input('id');
+        $quantity = $request->input('quantity');
+
+        // Отримання інформації про товар за його ідентифікатором
+        $product = Product::findOrFail($productId);
+
+        // Створення нового запису у таблиці cart_items для поточного користувача та обраного товару
+        $cartItem = new CartItem;
+        $cartItem->user_id = Auth::id();
+        $cartItem->product_id = $product->id;
+        $cartItem->quantity = $quantity;
+        $cartItem->save();
+
+        return Redirect()->back()->with('success', 'Товар успішно додано до кошика.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id): View
+    public function updateQuantityProduct(Request $request): RedirectResponse
     {
-        $product = Product::find($id);
+        // Отримання ID елемента кошика та нової кількості товару
+        $cartItemId = $request->input('cartItemId');
+        $quantity = $request->input('quantity');
 
-        return view('admin.products.details', compact('product'));
+        // Знаходження елемента кошика за його ID
+        $cartItem = CartItem::find($cartItemId);
+
+        // Оновлення кількості товару у кошику
+        if ($cartItem) {
+            $cartItem->quantity = $quantity;
+            $cartItem->save();
+        }
+
+        return Redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+    public function remove(int $cartItemId): RedirectResponse
+{
+    // Знаходження елемента кошика за вказаним ID
+    $cartItem = CartItem::find($cartItemId);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+    // Перевірка, чи був елемент знайдений
+    if ($cartItem) {
+        // Виконання видалення елемента кошика
+        $cartItem->delete();
+        return Redirect()->back()->with('success', 'Товар успішно видалено з кошика.');
+    } else {
+        // Обробка ситуації, коли елемент не знайдено
+        return Redirect()->back()->with('error', 'Товар з вказаним ID не знайдено в кошику.');
     }
+}
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function getCartQuantity(int $userId): int
     {
-        //
+        // Отримання всіх елементів кошика для користувача за його ID
+        $cartItems = CartItem::where('user_id', Auth::id())->get();
+
+        $totalQuantity = 0;
+        foreach ($cartItems as $item) {
+            $totalQuantity += $item->quantity;
+        }
+
+        return $totalQuantity;
     }
 }
