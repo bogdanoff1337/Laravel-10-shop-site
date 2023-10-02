@@ -48,7 +48,7 @@ Route::get('/load-more-products', [ProductsController::class, 'loadMoreProducts'
 Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.show');
 Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.updateQuantityProduct');
+Route::post('/cart/update', [CartController::class, 'updateQuantityProduct'])->name('cart.updateQuantityProduct');
 Route::post('/cart/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
 Route::post('/cart/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
 Route::get('/cart/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');

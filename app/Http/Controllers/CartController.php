@@ -62,7 +62,7 @@ class CartController extends Controller
         return Redirect()->back()->with('success', 'Товар успішно додано до кошика.');
     }
 
-    public function update(Request $request): RedirectResponse
+    public function updateQuantityProduct(Request $request): RedirectResponse
     {
         // Отримання ID елемента кошика та нової кількості товару
         $cartItemId = $request->input('cartItemId');
