@@ -73,7 +73,7 @@
                                     <a class="btn btn-secondary" href="{{ route('admin.dashboard') }}">
                                         Dashboard
                                     </a>
-                                    <a class="btn btn-secondary" href="{{ route('admin.products.create') }}">
+                                    <a class="btn btn-secondary" href="{{ route('products.create') }}">
                                         Add Products
                                     </a>
                                 @endif

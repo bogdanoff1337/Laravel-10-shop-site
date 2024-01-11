@@ -78,14 +78,14 @@
                                 <td>{{ $product->stock_quantity }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>
-                                    <form action="{{ route('admin.products.delete', $product->id) }}" method="POST">
+                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-primary">Edit</a>
+                                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-primary">Edit</a>
                                 </td>
                             </tr>
                         @endforeach

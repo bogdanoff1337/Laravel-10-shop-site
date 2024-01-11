@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProductsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        return view('admin.products.create');
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -26,11 +21,11 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request): RedirectResponse
     {
-        Product::create($request->all());
+        Product::create($request->validated());
 
-        return Redirect()->back()->with('success', 'product is save success.');
+        return Redirect()->route('/control');
     }
 
     /**
@@ -38,7 +33,9 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::find($id);
+
+        return view('admin.products.details', compact('product'));
     }
 
     /**
@@ -46,22 +43,29 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+
+        return view('admin.products.update', compact('product'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        //
+        Product::find($id)->update($request->validated());
+
+        return redirect('/control');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id) : RedirectResponse
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+
+        return Redirect()->back();
     }
 }

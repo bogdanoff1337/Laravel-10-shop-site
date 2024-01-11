@@ -7,7 +7,7 @@
     <div class="row">
         <div class="row">
             <div class="col-md-6">
-                <form action="{{ route('admin.products.update', $product) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('products.update', $product) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                    

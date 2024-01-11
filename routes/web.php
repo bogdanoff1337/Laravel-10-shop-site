@@ -9,6 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsController;
 
 Auth::routes();
@@ -24,30 +25,21 @@ Auth::routes();
 |
 */
 
-Route::get('/', [ProductsController::class, 'index'])->name('home');
-Route::get('/home', [ProductsController::class, 'index'])->name('home');
-// admin panel
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'AuthMiddleware', 'prefix' => 'control'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-    Route::delete('/products/{id}', [DashboardController::class, 'deleteProduct'])->name('admin.products.delete');
-    Route::get('/products/{id}/edit', [ProductsController::class, 'edit'])->name('admin.products.edit');
-    Route::put('/products/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
     Route::delete('/orders/{orderId}', [DashboardController::class, 'deleteOrder'])->name('admin.deleteOrder');
-    Route::get('/create', [ProductsController::class, 'create'])->name('admin.products.create');
     Route::put('/{orderId}', [DashboardController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
     Route::resource('/products', ProductsController::class);
 });
 
 // store page and details 
-Route::get('/store', [ProductsController::class, 'index'])->name('admin.products.index');
 
 Route::get('/search', [ProductsController::class, 'search']);
 Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
 Route::get('/load-more-products', [ProductsController::class, 'loadMoreProducts']);
-
-
 
 // cart 
 Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
