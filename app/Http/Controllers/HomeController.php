@@ -11,20 +11,6 @@ use Illuminate\Contracts\View\View;
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    protected $order;
-    public function __construct(Order $order)
-
-
-    {
-        $this->order = $order;
-        $this->middleware('auth');
-    }
-
-    /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable

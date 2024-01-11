@@ -30,7 +30,7 @@ class LoginController extends Controller
     protected function redirectTo()
     {
         if (auth()->user()->is_admin) {
-            return '/admin/dashboard';
+            return '/control';
         } else {
             return RouteServiceProvider::HOME;
         }

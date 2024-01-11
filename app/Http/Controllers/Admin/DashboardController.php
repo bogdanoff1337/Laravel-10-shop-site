@@ -17,9 +17,9 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $users = User::all();
+        $users = User::paginate(10);
 
-        $products = Product::all();
+        $products = Product::paginate(10);
 
         $orders = Order::with('items.product', 'user')->get();
 

@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
 class Admin extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'name',
         'email',

@@ -79,9 +79,9 @@
                                 @endif
 
                                 @if(Auth::check())
-                                    {{-- <a class="btn btn-secondary" href="{{ route('cart.show') }}">
-                                        <i class="bi bi-cart-fill">{{ $cartCount }}</i>
-                                    </a> --}}
+                                    <a class="btn btn-secondary" href="{{ route('cart.index') }}">
+                                        {{-- <i class="bi bi-cart-fill">{{ $cartCount }}</i> --}}
+                                    </a>
                                     <a class="btn btn-secondary" href="">
                                         <i class="bi bi-bookmark"></i>
                                     </a>

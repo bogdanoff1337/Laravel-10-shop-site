@@ -73,7 +73,7 @@
             </table>
             <div class="d-flex justify-content-end">
                 <div>
-                    <h4>Total: {{ $total }}$</h4>
+                    {{-- <h4>Total: {{ $total }}$</h4> --}}
                     <form method="POST" action="{{ route('orders.showOrderForm')}}">
                         @csrf
                         <button type="submit" class="btn btn-primary">Place Order</button>

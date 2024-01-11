@@ -2,95 +2,69 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Illuminate\Http\Request;
 use App\Models\CartItem;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-
+    /**
+     * Display a listing of the resource.
+     */
     public function index(): View
     {
-        // Перевірка, чи користувач автентифікований
-        if (auth()->check()) {
-            // Якщо користувач автентифікований, отримуємо його ID
-            $userId = auth()->id();
+        $userId = auth()->id();
 
-            // Отримуємо товари з кошика користувача
-            $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
+        $cartItems = CartItem::with('product')->where('user_id', $userId)->get();
 
-            // Розраховуємо загальну суму замовлення на основі товарів у кошику
-            $total = $cartItems->sum(function ($item) {
-                return $item->product->price * $item->quantity;
-            });
-
-
-            return view('cart.show', compact('cartItems', 'total'));
-        }
-
-        // Якщо користувач не автентифікований, все одно відображаємо сторінку кошика
-        return view('cart.show', compact('cartItems', 'total', 'cartCount'));
+        return view('cart.show', compact('cartItems'));
     }
 
-    public function add(Request $request): RedirectResponse
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        // Перевірка, чи користувач автентифікований
-        if (!Auth::check()) {
-            // Якщо користувач не зареєстрований, перенаправляємо його на сторінку логіну з повідомленням
-            return redirect()->route('login')->with('error', 'Будь ласка, увійдіть, щоб додавати товари в кошик.');
-        }
-
-        // Отримання даних про товар, який додається до кошика
-        $productId = $request->input('id');
-        $quantity = $request->input('quantity');
-
-        // Отримання інформації про товар за його ідентифікатором
-        $product = Product::findOrFail($productId);
-
-        // Створення нового запису у таблиці cart_items для поточного користувача та обраного товару
-        $cartItem = new CartItem;
-        $cartItem->user_id = Auth::id();
-        $cartItem->product_id = $product->id;
-        $cartItem->quantity = $quantity;
-        $cartItem->save();
-
-        return Redirect()->back()->with('success', 'Товар успішно додано до кошика.');
+        //
     }
 
-    public function updateQuantityProduct(Request $request): RedirectResponse
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        // Отримання ID елемента кошика та нової кількості товару
-        $cartItemId = $request->input('cartItemId');
-        $quantity = $request->input('quantity');
-
-        // Знаходження елемента кошика за його ID
-        $cartItem = CartItem::find($cartItemId);
-
-        // Оновлення кількості товару у кошику
-        if ($cartItem) {
-            $cartItem->quantity = $quantity;
-            $cartItem->save();
-        }
-
-        return Redirect()->route('cart.show', ['cartItemId' => $cartItemId]);
+        //
     }
 
-    public function remove(int $cartItemId): RedirectResponse
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        // Знаходження елемента кошика за вказаним ID
-        $cartItem = CartItem::find($cartItemId);
+        //
+    }
 
-        // Перевірка, чи був елемент знайдений
-        if ($cartItem) {
-            // Виконання видалення елемента кошика
-            $cartItem->delete();
-            return Redirect()->back()->with('success', 'Товар успішно видалено з кошика.');
-        } else {
-            // Обробка ситуації, коли елемент не знайдено
-            return Redirect()->back()->with('error', 'Товар з вказаним ID не знайдено в кошику.');
-        }
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
     }
 }

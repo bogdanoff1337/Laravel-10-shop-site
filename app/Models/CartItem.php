@@ -9,6 +9,7 @@ class CartItem extends Model
 {
     protected $table = 'cart_items';
 
+
     public function user()
     {
         return $this->belongsTo(User::class);
