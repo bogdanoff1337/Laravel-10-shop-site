@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductsController extends Controller
 {
-    
+
     public function index(): View
     {
         // Отримуємо всі продукти та сортуємо їх за датою створення у зворотньому порядку
@@ -24,33 +24,16 @@ class ProductsController extends Controller
             $product->description = substr($product->description, 0, 60);
         }
 
-        // Отримуємо кількість товарів у кошику користувача
-        $cartCount = $this->getCartQuantity(Auth::id());
 
-        return view('admin.products.index', compact('products', 'cartCount'));
+        return view('admin.products.index', compact('products'));
     }
 
-    public function getCartQuantity($userId = null): int
-    {
-        // Отримуємо всі елементи кошика для користувача за його ідентифікатором
-        $cartItems = CartItem::where('user_id', $userId)->get();
-    
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item['quantity'];
-        }
-    
-        return $totalQuantity;
-    }
 
     public function create(): View
     {
-        // Отримуємо кількість товарів у кошику користувача
-        $cartCount = $this->getCartQuantity(Auth::id());
-    
-        return view('admin.products.create', ['cartCount' => $cartCount]);
+        return view('admin.products.create');
     }
-    
+
 
     public function store(Request $request): RedirectResponse
     {
@@ -62,7 +45,7 @@ class ProductsController extends Controller
         $photo = $request->file('photo');
 
         // Створюємо новий запис для продукту
-        $product = new Product(); 
+        $product = new Product();
         $product->name = $name;
         $product->description = $description;
         $product->price = $price;
@@ -84,10 +67,9 @@ class ProductsController extends Controller
     {
         // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);
-    
-        // Отримуємо кількість товарів у кошику користувача
-        $cartCount = $this->getCartQuantity(Auth::id());
-    
+
+
+
         return view('admin.products.edit', compact('product', 'cartCount'));
     }
 
@@ -98,7 +80,7 @@ class ProductsController extends Controller
         $description = $request->input('description');
         $price = $request->input('price');
         $stock_quantity = $request->input('stock_quantity');
-       
+
         $photo = $request->file('photo');
 
         // Знаходимо продукт за його ідентифікатором
@@ -109,7 +91,7 @@ class ProductsController extends Controller
         $product->description = $description;
         $product->price = $price;
         $product->stock_quantity = $stock_quantity;
-    
+
 
         // Зміна фотографії
         if ($photo) {
@@ -133,10 +115,8 @@ class ProductsController extends Controller
     {
         // Знаходимо продукт за його ідентифікатором
         $product = Product::find($id);
-    
-        // Отримуємо кількість товарів у кошику користувача
-        $cartCount = $this->getCartQuantity(Auth::id());
-    
-        return view('admin.products.details', compact('product', 'cartCount'));
+
+
+        return view('admin.products.details', compact('product'));
     }
 }

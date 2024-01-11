@@ -15,6 +15,6 @@ class Like extends Model
 
     public function phone()
     {
-        return $this->belongsTo(Phone::class);
+        return $this->belongsTo(Product::class);
     }
 }

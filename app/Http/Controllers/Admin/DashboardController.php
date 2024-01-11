@@ -19,35 +19,23 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        // Отримуємо всіх користувачів
         $users = User::all();
-        
-        // Отримуємо всі продукти
+
         $products = Product::all();
-        
-        // Отримуємо всі замовлення разом з інформацією про продукти та користувачів
+
         $orders = Order::with('items.product', 'user')->get();
 
-        // Групуємо замовлення за номерами
         $groupedOrders = $orders->groupBy('order_number');
-        
-        // Сума для кошика
+
         $total = 0;
-        
-        // Отримуємо всі елементи кошика для поточного користувача
-        $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
-        
-        // Отримуємо загальну кількість товарів у кошику для поточного користувача
-        $cartCount = $this->getCartQuantity(Auth::id());
 
         return view('admin.dashboard', [
             'users' => $users,
             'products' => $products,
             'orders' => $orders,
             'groupedOrders' => $groupedOrders,
-            'cartItems' => $cartItems,
             'total' => $total,
-            'cartCount' => $cartCount,
+
         ]);
     }
 
@@ -113,18 +101,5 @@ class DashboardController extends Controller
         $order->delete();
 
         return Redirect()->back()->with('success', 'Замовлення успішно видалено.');
-    }
-
-    public function getCartQuantity(int $userId): int
-    {
-        // Отримуємо всі елементи кошика для користувача за його ідентифікатором
-        $cartItems = CartItem::where('user_id', $userId)->get();
-
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item['quantity'];
-        }
-
-        return $totalQuantity;
     }
 }

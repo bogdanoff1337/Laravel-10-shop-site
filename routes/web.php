@@ -1,13 +1,15 @@
 <?php
 
 
-use App\Http\Controllers\Admin\ProductsController;
+// use App\Http\Controllers\Admin\ProductsController;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ProductsController;
 
 Auth::routes();
 
@@ -25,19 +27,22 @@ Auth::routes();
 Route::get('/', [ProductsController::class, 'index'])->name('home');
 Route::get('/home', [ProductsController::class, 'index'])->name('home');
 // admin panel
-Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-Route::delete('/admin/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-Route::delete('/admin/products/{id}', [DashboardController::class, 'deleteProduct'])->name('admin.products.delete');
-Route::get('/admin/products/{id}/edit', [ProductsController::class, 'edit'])->name('admin.products.edit');
-Route::put('/admin/products/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
-Route::delete('/admin/orders/{orderId}', [DashboardController::class, 'deleteOrder'])->name('admin.deleteOrder');
-Route::get('/admin/create', [ProductsController::class, 'create'])->name('admin.products.create');
-Route::put('/orders/{orderId}', [DashboardController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
 
+Route::group(['middleware' => 'AuthMiddleware', 'prefix' => 'control'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
+    Route::delete('/products/{id}', [DashboardController::class, 'deleteProduct'])->name('admin.products.delete');
+    Route::get('/products/{id}/edit', [ProductsController::class, 'edit'])->name('admin.products.edit');
+    Route::put('/products/{id}', [ProductsController::class, 'update'])->name('admin.products.update');
+    Route::delete('/orders/{orderId}', [DashboardController::class, 'deleteOrder'])->name('admin.deleteOrder');
+    Route::get('/create', [ProductsController::class, 'create'])->name('admin.products.create');
+    Route::put('/{orderId}', [DashboardController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
+    Route::resource('/products', ProductsController::class);
+});
 
 // store page and details 
 Route::get('/store', [ProductsController::class, 'index'])->name('admin.products.index');
-Route::post('/products', [ProductsController::class, 'store'])->name('admin.products.store');
+
 Route::get('/search', [ProductsController::class, 'search']);
 Route::get('/products/{id}', [ProductsController::class, 'show'])->name('products.show');
 Route::get('/load-more-products', [ProductsController::class, 'loadMoreProducts']);

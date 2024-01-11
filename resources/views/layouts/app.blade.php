@@ -70,18 +70,18 @@
                                     My Orders
                                 </a>
                                 @if(auth()->user()->is_admin == 1)
-                                    <a class="btn btn-secondary" href="/admin/dashboard">
+                                    <a class="btn btn-secondary" href="{{ route('admin.dashboard') }}">
                                         Dashboard
                                     </a>
-                                    <a class="btn btn-secondary" href="/admin/create">
+                                    <a class="btn btn-secondary" href="{{ route('admin.products.create') }}">
                                         Add Products
                                     </a>
                                 @endif
 
                                 @if(Auth::check())
-                                    <a class="btn btn-secondary" href="{{ route('cart.show') }}">
+                                    {{-- <a class="btn btn-secondary" href="{{ route('cart.show') }}">
                                         <i class="bi bi-cart-fill">{{ $cartCount }}</i>
-                                    </a>
+                                    </a> --}}
                                     <a class="btn btn-secondary" href="">
                                         <i class="bi bi-bookmark"></i>
                                     </a>

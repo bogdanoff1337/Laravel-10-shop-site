@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    
+
     public function index(): View
     {
         // Перевірка, чи користувач автентифікований
@@ -27,10 +27,8 @@ class CartController extends Controller
                 return $item->product->price * $item->quantity;
             });
 
-            // Отримуємо кількість товарів у кошику користувача
-            $cartCount = $this->getCartQuantity(Auth::id());
 
-            return view('cart.show', compact('cartItems', 'total', 'cartCount'));
+            return view('cart.show', compact('cartItems', 'total'));
         }
 
         // Якщо користувач не автентифікований, все одно відображаємо сторінку кошика
@@ -81,31 +79,18 @@ class CartController extends Controller
     }
 
     public function remove(int $cartItemId): RedirectResponse
-{
-    // Знаходження елемента кошика за вказаним ID
-    $cartItem = CartItem::find($cartItemId);
-
-    // Перевірка, чи був елемент знайдений
-    if ($cartItem) {
-        // Виконання видалення елемента кошика
-        $cartItem->delete();
-        return Redirect()->back()->with('success', 'Товар успішно видалено з кошика.');
-    } else {
-        // Обробка ситуації, коли елемент не знайдено
-        return Redirect()->back()->with('error', 'Товар з вказаним ID не знайдено в кошику.');
-    }
-}
-
-    public function getCartQuantity(int $userId): int
     {
-        // Отримання всіх елементів кошика для користувача за його ID
-        $cartItems = CartItem::where('user_id', Auth::id())->get();
+        // Знаходження елемента кошика за вказаним ID
+        $cartItem = CartItem::find($cartItemId);
 
-        $totalQuantity = 0;
-        foreach ($cartItems as $item) {
-            $totalQuantity += $item->quantity;
+        // Перевірка, чи був елемент знайдений
+        if ($cartItem) {
+            // Виконання видалення елемента кошика
+            $cartItem->delete();
+            return Redirect()->back()->with('success', 'Товар успішно видалено з кошика.');
+        } else {
+            // Обробка ситуації, коли елемент не знайдено
+            return Redirect()->back()->with('error', 'Товар з вказаним ID не знайдено в кошику.');
         }
-
-        return $totalQuantity;
     }
 }
