@@ -2,6 +2,7 @@
 1 - git clone project
 
 2 - [install sail into project](https://laravel.com/docs/10.x/sail#main-content)
+    also u can up project with laradock - but he is mach more bigger 
 
 3 - build sail  
 
