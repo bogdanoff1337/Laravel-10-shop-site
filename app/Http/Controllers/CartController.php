@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CartItem;
+use App\Models\Product;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -21,27 +22,22 @@ class CartController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Show the form for addToCart a new resource.
      */
     public function store(Request $request)
     {
-        //
+        CartItem::create($request->product_id);
+        return redirect('cart.show')->withSuccessMessage('Item was added to your cart!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id): View
     {
-        //
+        $product = Product::find($id);
+
+        return view('admin.products.details', compact('product'));
     }
 
     /**

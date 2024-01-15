@@ -30,16 +30,6 @@ class ProductsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id): View
-    {
-        $product = Product::find($id);
-
-        return view('admin.products.details', compact('product'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id): View

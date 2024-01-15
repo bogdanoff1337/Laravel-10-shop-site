@@ -54,7 +54,7 @@ Route::get('/cart/remove', [OrderController::class, 'removeAll'])->name('cart.re
 
 Route::group(['middleware' => 'auth', 'prefix' => 'cart'], function () {
     Route::resource('/cart', CartController::class);
-    Route::post('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+    // Route::post('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/update', [CartController::class, 'updateQuantityProduct'])->name('cart.updateQuantityProduct');
     Route::post('/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');

@@ -1,22 +1,28 @@
 body {
   font-family: 'Roboto', sans-serif;
+  background-color: black;
 }
 
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Roboto', sans-serif;
 }
 
 .img-same-size {
-    width: 100%;
-    height: auto;
-  }
+  width: 100%;
+  height: auto;
+}
 
 .card img {
-    width: 300px;
-    height: 330px;
-    background-size: cover;
-    background-position: center;
+  width: 300px;
+  height: 330px;
+  background-size: cover;
+  background-position: center;
 }
 
 .product-description {
@@ -30,8 +36,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .product-image {
-  width: 300px; 
-  transition: transform 0.3s; 
+  width: 300px;
+  transition: transform 0.3s;
 }
 
 .product-card:hover .product-image {
@@ -39,6 +45,49 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .product-card:hover .product-description {
-  display: block; 
+  display: block;
 }
 
+
+.product-card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.product-description {
+  padding: 15px;
+}
+
+.product-description .card-title {
+  margin-bottom: 15px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.product-description .card-text {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.product-features {
+  margin-top: 20px;
+}
+
+.product-features .btn {
+  font-size: 12px;
+  padding: 10px 20px;
+}

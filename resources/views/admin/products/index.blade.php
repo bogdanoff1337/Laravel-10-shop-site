@@ -16,7 +16,7 @@
                         <p class="card-text">Price: ${{ $product->price }}</p>
                         
                         <div class="product-features d-flex justify-content-between">
-                            <form  action="{{ route('cart.add', $product->id) }}" method="POST">
+                            <form  action="{{ route('cart.store', $product->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="id" value="{{ $product->id }}">
                                 <input type="hidden" name="quantity" value="1">
@@ -24,7 +24,7 @@
                                     Add to cart <i class="bi bi-cart-plus-fill"></i>
                                 </button>
                             </form>
-                            <a href="{{ route('products.show', $product->id) }}" class="btn btn-primary">Details...</a>
+                            <a href="{{ route('cart.show', $product->id) }}" class="btn btn-primary">Details...</a>
                         </div>
                     </div>
                 </div>
