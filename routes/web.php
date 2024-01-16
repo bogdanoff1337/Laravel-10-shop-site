@@ -45,20 +45,20 @@ Route::get('/load-more-products', [ProductsController::class, 'loadMoreProducts'
 // cart 
 Route::post('/add-to-cart/{id}', [CartController::class, 'add'])->name('cart.add');
 
-Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/update', [CartController::class, 'updateQuantityProduct'])->name('cart.updateQuantityProduct');
-Route::post('/cart/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
-Route::post('/cart/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
-Route::get('/cart/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');
-Route::get('/cart/remove', [OrderController::class, 'removeAll'])->name('cart.removeAll');
+// Route::delete('/cart/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
+// Route::post('/cart/update', [CartController::class, 'updateQuantityProduct'])->name('cart.updateQuantityProduct');
+// Route::post('/cart/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
+// Route::post('/cart/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
+ Route::get('/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');
+// Route::get('/cart/remove', [OrderController::class, 'removeAll'])->name('cart.removeAll');
 
-Route::group(['middleware' => 'auth', 'prefix' => 'cart'], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::resource('/cart', CartController::class);
     // Route::post('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::delete('/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
-    Route::post('/update', [CartController::class, 'updateQuantityProduct'])->name('cart.updateQuantityProduct');
-    Route::post('/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
-    Route::post('/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
-    Route::get('/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');
-    Route::get('/remove', [OrderController::class, 'removeAll'])->name('cart.removeAll');   
+    // Route::delete('/remove/{cartItemId}', [CartController::class, 'remove'])->name('cart.remove');
+    // Route::post('/update', [CartController::class, 'updateQuantityProduct'])->name('cart.updateQuantityProduct');
+    // Route::post('/order', [OrderController::class, 'showOrderForm'])->name('orders.showOrderForm');
+    // Route::post('/order/placeOrder', [OrderController::class, 'placeOrder'])->name('orders.placeOrder');
+    // Route::get('/details', [OrderController::class, 'showOrderDetails'])->name('cart.details');
+    // Route::get('/remove', [OrderController::class, 'removeAll'])->name('cart.removeAll');   
 });

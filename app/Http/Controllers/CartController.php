@@ -24,9 +24,10 @@ class CartController extends Controller
     /**
      * Show the form for addToCart a new resource.
      */
-    public function store(Request $request)
+    public function store(Request $request, $userId)
     {
-        CartItem::create($request->product_id);
+        dd($userId);
+        CartItem::create($request->with($userId)->all());
         return redirect('cart.show')->withSuccessMessage('Item was added to your cart!');
     }
 

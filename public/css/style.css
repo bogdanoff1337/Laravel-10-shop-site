@@ -13,6 +13,33 @@ h6 {
   font-family: 'Roboto', sans-serif;
 }
 
+.navbar {
+  background-color: rgba(255, 255, 255, 0.5);
+  /* Білий колір з 50% прозорістю */
+  height: 60px;
+  /* Висота навігаційного бару */
+  display: flex;
+  /* Використовуємо flexbox для розташування елементів */
+  justify-content: space-between;
+  /* Розташовуємо елементи на рівні відстані один від одного */
+  align-items: center;
+  /* Вирівнюємо елементи по вертикалі */
+  padding: 0 15px;
+  /* Додаємо внутрішній відступ */
+}
+
+.navbar-brand {
+  margin: 10px 10px 38px 38px;
+}
+
+.navbar-nav{
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
 .img-same-size {
   width: 100%;
   height: auto;
@@ -50,13 +77,13 @@ h6 {
 
 
 .product-card {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: 0.3s;
   border-radius: 5px;
 }
 
 .product-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .product-image {
@@ -91,3 +118,11 @@ h6 {
   font-size: 12px;
   padding: 10px 20px;
 }
+
+/* .btn-main {
+  width: 100%;
+  background-color: #ffffff;
+  color: #080710;
+  border-radius: 5px;
+  cursor: pointer;
+} */

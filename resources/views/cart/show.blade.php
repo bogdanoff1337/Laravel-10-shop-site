@@ -31,7 +31,7 @@
                             <td>{{ $cartItem->product->price }} $</td>
 
                         <td>
-                            <form method="POST" action="{{ route('cart.updateQuantityProduct') }}">
+                            {{-- <form method="POST" action="{{ route('cart.updateQuantityProduct') }}"> --}}
                                 @csrf
                                 <input type="hidden" name="cartItemId" value="{{ $cartItem->id }}">
                                 
@@ -49,11 +49,11 @@
                         <td>{{ $cartItem->product->price * $cartItem->quantity }} $</td>
                         <td>
                             
-                            <form id="remove-form-{{ $cartItem->id }}" action="{{ route('cart.remove', $cartItem->id) }}" method="POST" style="display: none;">
+                            {{-- <form id="remove-form-{{ $cartItem->id }}" action="{{ route('cart.remove', $cartItem->id) }}" method="POST" style="display: none;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                            </form>
+                            </form> --}}
                             <button type="button" class="btn  btn-danger" onclick="confirmRemove({{ $cartItem->id }})">Remove</button>
                         </td>
                         <script>
@@ -66,7 +66,7 @@
                         
                     </tr>
                     @endforeach
-                    <a href="{{ route('cart.removeAll', Auth::id()) }}" class="btn btn-danger">Remove All Items</a>
+                    {{-- <a href="{{ route('cart.removeAll', Auth::id()) }}" class="btn btn-danger">Remove All Items</a> --}}
 
       
                 </tbody>
@@ -74,10 +74,10 @@
             <div class="d-flex justify-content-end">
                 <div>
                     {{-- <h4>Total: {{ $total }}$</h4> --}}
-                    <form method="POST" action="{{ route('orders.showOrderForm')}}">
+                    {{-- <form method="POST" action="{{ route('orders.showOrderForm')}}">
                         @csrf
                         <button type="submit" class="btn btn-primary">Place Order</button>
-                    </form>
+                    </form> --}}
                 </div>
             </div>
 
