@@ -61,6 +61,7 @@
   font-weight: 600;
   border-radius: 5px;
   cursor: pointer;
+  text-decoration:none;
 }
 
 .btn-log {

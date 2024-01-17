@@ -56,6 +56,11 @@ class ProductsCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(ProductsRequest::class);
+        CRUD::field([   // Upload photo
+            'name'      => 'photo',
+            'label'     => 'photo',
+            'type'      => 'upload',
+        ]);
         CRUD::setFromDb(); // set fields from db columns.
 
         /**

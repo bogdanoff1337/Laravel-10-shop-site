@@ -29,7 +29,7 @@ class ProductsRequest extends FormRequest
             'description' => ['required', 'string'],
             'price' => ['required','numeric','between:0,99999999.99'],
             'stock_quantity' => ['required','numeric','between:0,99999999'],
-            'photo' => ['nullable', 'integer'],
+            'photo' => ['nullable', 'string'],
         ];
     }
 

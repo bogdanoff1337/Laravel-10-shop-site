@@ -17,12 +17,13 @@ class HomeController extends Controller
      */
     public function index(): View
     {
-        $products = Product::orderBy('created_at', 'desc')->paginate(10);
+        $products = Product::orderBy('created_at', 'desc')->paginate(12);
+        // dd($products);
 
         foreach ($products as $product) {
             $product->description = substr($product->description, 0, 30);
         }
 
-        return view('admin.products.index', compact('products'));
+        return view('products.index', compact('products'));
     }
 }

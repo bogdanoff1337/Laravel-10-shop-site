@@ -14,11 +14,14 @@ class ProductsSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('products')->insert([
-            'name' => Str::random(10),
-            'description' => Str::random(50),
-            'price' => rand(100, 300),
-            'stock_quantity' => rand(10, 100),
-        ]);
+        for ($i = 0; $i < 20; $i++) {
+            DB::table('products')->insert([
+                'name' => Str::random(10),
+                'description' => Str::random(10),
+                'price' => rand(100, 300),
+                'stock_quantity' => rand(10, 100),
+            ]);
+        }
+        
     }
 }

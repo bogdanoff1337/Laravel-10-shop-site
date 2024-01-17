@@ -28,13 +28,9 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => 'AuthMiddleware', 'prefix' => 'control'], function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::delete('/delete/{id}', [AdminController::class, 'delete'])->name('admin.delete');
-    Route::delete('/orders/{orderId}', [DashboardController::class, 'deleteOrder'])->name('admin.deleteOrder');
-    Route::put('/{orderId}', [DashboardController::class, 'updateOrderStatus'])->name('admin.updateOrderStatus');
-    Route::resource('/products', ProductsController::class);
-});
+// Route::group(['middleware' => 'AuthMiddleware'], function () {
+//     Route::resource('/products', ProductsController::class);
+// });
 
 // store page and details 
 
