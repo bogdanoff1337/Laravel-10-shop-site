@@ -19,3 +19,10 @@
 9 - php artisan migrate 
 
 10 - php artisan db:seed
+
+### for frontend 
+1 - npm install 
+
+2 - npm install bootstrap@5.3.2 
+
+3 - npm run dev
