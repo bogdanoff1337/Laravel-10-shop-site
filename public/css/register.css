@@ -42,8 +42,8 @@
   display: block;
   height: 50px;
   width: 100%;
-  color: #ffffff;
-  background-color: #000000;
+  color: #000000;
+  background-color: #ffffff;
   border-radius: 3px;
   padding: 0 10px;
   margin-top: 8px;
@@ -70,7 +70,7 @@
 .btn-main {
   height: 45px;
   width: 150px;
-  background-color: rgba(255, 255, 255, 0.13);
+  background-color: rgba(118, 16, 177, 0.13);
   transform: translate(-50%, -50%);
   border-radius: 10px;
   backdrop-filter: blur(10px);

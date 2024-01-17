@@ -23,13 +23,7 @@ class ProductRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'price' => ['required','numeric','between:0,99999999.99'],
-            'stock_quantity' => ['required','numeric','between:0,99999999'],
-            'photo' => ['nullable', 'integer'],
-        ];
+        
     }
 
 }

@@ -55,21 +55,6 @@
                         <a class="btn-main" href="{{ route('register') }}">{{ __('Register') }}</a>
                     @endif
                 @else
-                    <a class="nav-link text-light">
-                        Welcome {{ Auth::user()->name }}
-                    </a>
-                    <a class="btn-main" href="{{ route('cart.details') }}">
-                        My Orders
-                    </a>
-                    @if (auth()->user()->is_admin == 1)
-                        <a class="btn-main" href="{{ route('admin.dashboard') }}">
-                            Dashboard
-                        </a>
-                        <a class="btn-main" href="{{ route('products.create') }}">
-                            Add Products
-                        </a>
-                    @endif
-
                     {{-- @if (Auth::check())
                                     <a class="btn " href="{{ route('cart.index') }}">
                                         <i class="bi bi-cart-fill">{{ $cartCount }}</i>
@@ -91,7 +76,7 @@
 
     </div>
     </nav>
-    <main class="">
+    <main class="py-6 mt-5">
         @yield('content')
     </main>
     </div>
